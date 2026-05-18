@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use these model checkpoints, please cite the paper below."
+type: software
+title: "PC-AiStab: Trained ONNX Checkpoints"
+abstract: >
+  Physics-constrained neural-network stabilisation parameter for incompressible
+  Navier-Stokes. Trained ONNX models (SH-target and residual-recovery campaigns,
+  5 seeds x 4 constraint variants) for deployment inside a stabilised FEM solver.
+authors:
+  - family-names: Akrami
+    given-names: Ehsan
+    email: ehsanakrami1@gmail.com
+    orcid: ""
+repository-code: "https://github.com/ehsanakrami/pc-aistab-models"
+url: "https://github.com/ehsanakrami/pc-aistab-models"
+license: MIT
+version: "1.0.0"
+date-released: "2026-05-18"
+keywords:
+  - stabilised finite elements
+  - SUPG
+  - PSPG
+  - stabilisation parameter
+  - neural network
+  - incompressible Navier-Stokes
+  - ONNX
+  - machine learning
+  - computational fluid dynamics
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Akrami
+      given-names: Ehsan
+  title: "PC-AiStab: a physics-constrained neural-network stabilisation parameter for incompressible Navier-Stokes"
+  journal: "Computer Methods in Applied Mechanics and Engineering"
+  year: 2026
+  notes: "Submitted"
