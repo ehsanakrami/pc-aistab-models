@@ -1,12 +1,19 @@
-# PC-AiStab: Trained ONNX Checkpoints
+# Learned Stabilisation-Parameter Models for Incompressible Navier–Stokes
 
-**Physics-Constrained Neural-Network Stabilisation Parameter for Incompressible Navier–Stokes**
+**PC-AiStab (isotropic, do-no-harm) and ADJSTAB (anisotropic, adjoint-supervised) neural stabilisation-parameter models**
 
-This repository releases the trained ONNX inference models from the paper:
+This repository releases the trained inference models from the paper:
 
-> E. Akrami, *PC-AiStab: a physics-constrained neural-network stabilisation parameter for incompressible Navier–Stokes*, submitted to *Computer Methods in Applied Mechanics and Engineering*, 2026.
+> E. Akrami and Y. Delauré, *A Verified Discrete-Adjoint Framework for Stabilization-Parameter Accuracy in Laminar Incompressible Flow: The Headroom Principle, Parameter-Free Closed Forms, and Certified Deployment*, submitted to *Computer Methods in Applied Mechanics and Engineering*, 2026.
 
-The networks correct the Shakib–Hughes–Codina (SH) stabilisation parameter `τ` inside a classical SUPG/PSPG/LSIC stabilised finite-element solver. Each model accepts 48 per-element local features and returns two scalar multipliers `(φ_M, φ_C)` that rescale the momentum and continuity stabilisation parameters respectively.
+The full archival reproducibility capsule for the paper (solver, discrete-adjoint implementation, closed forms, training corpora, and figure/table scripts) is deposited on Zenodo under the reserved DOI [`10.5281/zenodo.21237054`](https://doi.org/10.5281/zenodo.21237054) — the record is private at submission and is released publicly, activating the DOI, on acceptance.
+
+The models correct the Shakib–Hughes–Codina (SH) stabilisation parameter `τ` inside a classical SUPG/PSPG/LSIC stabilised finite-element solver. The repository contains **two complementary learned multipliers**:
+
+- **PC-AiStab (isotropic)** — a bounded, SH-supervised network that accepts 48 per-element features and returns two multipliers `(φ_M, φ_C)` rescaling the momentum and continuity stabilisation parameters. Designed as a *do-no-harm* correction that provably recovers SH in the Stokes limit. Released as ONNX in `checkpoints/sh_target/` and `checkpoints/residual_recovery/`.
+- **ADJSTAB (anisotropic)** — a discrete-adjoint-supervised, orientation-aware model that accepts 17 per-element features and returns a single anisotropic stabilisation multiplier `c`. Supervised on an error-optimal (adjoint) signal for a genuine accuracy gain on stretched, anisotropic elements. Released as a portable JSON in `checkpoints/anisotropic/`.
+
+The sections below document the isotropic PC-AiStab models first (architecture, features, ONNX inference); the anisotropic ADJSTAB model is documented under [The anisotropic model (ADJSTAB)](#the-anisotropic-model-adjstab).
 
 ---
 
@@ -14,20 +21,24 @@ The networks correct the Shakib–Hughes–Codina (SH) stabilisation parameter `
 
 ```
 checkpoints/
-  sh_target/                   # SH-target campaign (trivial-target baseline)
+  sh_target/                    # Isotropic PC-AiStab, SH-target campaign (trivial-target baseline)
     seed_{0..4}/
       pc_aistab_{variant}.onnx
       pc_aistab_{variant}_norm.json
-  residual_recovery/            # Residual-recovery campaign (Phase B)
+  residual_recovery/            # Isotropic PC-AiStab, residual-recovery campaign (Phase B)
     seed_{0..4}/
       pc_aistab_phaseB_{variant}.onnx
       pc_aistab_phaseB_{variant}.onnx.data
       pc_aistab_phaseB_{variant}_norm.json
+  anisotropic/                  # Anisotropic ADJSTAB model (portable, self-contained JSON)
+    aistab_anisotropic.json
 examples/
-  inference.py                  # Minimal Python inference example
-  batch_inference.py            # Batched inference over a set of element states
+  inference.py                  # Minimal ONNX inference (isotropic PC-AiStab)
+  batch_inference.py            # Batched ONNX inference (isotropic PC-AiStab)
+  anisotropic_inference.py      # NumPy-only inference (anisotropic ADJSTAB)
 docs/
-  features.md                   # Complete 48-feature specification
+  features.md                   # 48-feature specification (isotropic PC-AiStab)
+  anisotropic_features.md       # 17-feature specification (anisotropic ADJSTAB)
 ```
 
 **Variants** — `{variant}` is one of:
@@ -156,12 +167,53 @@ See [`examples/inference.py`](examples/inference.py) for a self-contained runnab
 
 ---
 
+## The anisotropic model (ADJSTAB)
+
+The isotropic PC-AiStab models above are a bounded *do-no-harm* correction to SH. The **anisotropic** model is the paper's second learned multiplier: it is supervised on an **error-optimal discrete-adjoint** signal (rather than the SH parameter) and is **orientation-aware**, so it delivers a genuine accuracy gain on stretched, anisotropic elements where the isotropic SH form is least sharp.
+
+It ships as a single **portable, self-contained JSON** — [`checkpoints/anisotropic/aistab_anisotropic.json`](checkpoints/anisotropic/aistab_anisotropic.json) — that carries the feature list, the normalisation statistics, all weights and biases, the activation, the output transform, and the clip bounds. No ONNX Runtime, PyTorch, or solver is needed to evaluate it; NumPy suffices.
+
+| Property | Value |
+|----------|-------|
+| Input features | 17 per-element quantities (see [`docs/anisotropic_features.md`](docs/anisotropic_features.md)) |
+| Architecture | MLP `17 → 32 → 32 → 1`, `tanh` hidden activations |
+| Output | single scalar `logc`; deployed multiplier `c = clip(exp(logc), 0.01, 5.0)` |
+| Supervision | discrete-adjoint (error-optimal) target |
+| Training samples | 48 224 (multi-seed final model) |
+| Validation R² | 0.685 |
+
+**Evaluation** (reproduces the compiled solver kernel exactly):
+
+```python
+import json, numpy as np
+
+m = json.load(open("checkpoints/anisotropic/aistab_anisotropic.json"))
+mu, sd = np.array(m["mu"]), np.array(m["sd"])          # length-17 normalisation
+W = [np.array(w) for w in m["W"]]                      # [(17,32),(32,32),(32,1)]
+b = [np.array(v) for v in m["b"]]
+
+def predict(x_raw):                                    # x_raw: [batch, 17]
+    h = (np.atleast_2d(x_raw) - mu) / sd
+    for i, (Wi, bi) in enumerate(zip(W, b)):
+        z = h @ Wi + bi
+        h = np.tanh(z) if i < len(W) - 1 else z        # tanh on hidden layers only
+    return np.clip(np.exp(h[:, 0]), *m["clip"])        # deployed multiplier c
+
+# tau_aniso = c * tau_aniso_baseline
+```
+
+The feature order and per-feature definitions are in [`docs/anisotropic_features.md`](docs/anisotropic_features.md); see [`examples/anisotropic_inference.py`](examples/anisotropic_inference.py) for a runnable script. The same weights are compiled into the paper's solver, so this JSON reproduces the deployed anisotropic parameter bit-for-bit.
+
+---
+
 ## Requirements
+
+The isotropic PC-AiStab models are ONNX and need `onnxruntime`; the anisotropic ADJSTAB model is pure JSON and needs only `numpy`.
 
 | Package | Tested version | Notes |
 |---------|---------------|-------|
-| `onnxruntime` | ≥ 1.16 | CPU inference path; GPU not required |
-| `numpy` | ≥ 1.24 | Feature preparation and post-processing |
+| `onnxruntime` | ≥ 1.16 | CPU inference path for the isotropic ONNX models; GPU not required |
+| `numpy` | ≥ 1.24 | Feature preparation, post-processing, and all anisotropic-model inference |
 
 Install via pip:
 
@@ -202,16 +254,27 @@ Every checkpoint in this repository passed the following automated gates before 
 
 ## Citation
 
-If you use these models in your research, please cite the following paper:
+If you use these models in your research, please cite the paper and the archived capsule:
 
 ```bibtex
-@article{Akrami2026PCAiStab,
-  author  = {Akrami, Ehsan},
-  title   = {{PC-AiStab}: a physics-constrained neural-network stabilisation
-             parameter for incompressible {Navier--Stokes}},
+@article{AkramiDelaure2026MLTau,
+  author  = {Akrami, Ehsan and Delaur\'e, Yan},
+  title   = {A Verified Discrete-Adjoint Framework for Stabilization-Parameter
+             Accuracy in Laminar Incompressible Flow: The Headroom Principle,
+             Parameter-Free Closed Forms, and Certified Deployment},
   journal = {Computer Methods in Applied Mechanics and Engineering},
   year    = {2026},
-  note    = {Submitted; preprint available on request}
+  note    = {Submitted}
+}
+
+@software{AkramiDelaure2026Capsule,
+  author    = {Akrami, Ehsan and Delaur\'e, Yan},
+  title     = {Reproducibility capsule for ``A Verified Discrete-Adjoint
+               Framework for Stabilization-Parameter Accuracy in Laminar
+               Incompressible Flow''},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21237054}
 }
 ```
 

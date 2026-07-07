@@ -1,26 +1,37 @@
 cff-version: 1.2.0
-message: "If you use these model checkpoints, please cite the paper below."
+message: "If you use these models, please cite the paper below."
 type: software
-title: "PC-AiStab: Trained ONNX Checkpoints"
+title: "Learned Stabilisation-Parameter Models for Incompressible Navier-Stokes (PC-AiStab + ADJSTAB)"
 abstract: >
-  Physics-constrained neural-network stabilisation parameter for incompressible
-  Navier-Stokes. Trained ONNX models (SH-target and residual-recovery campaigns,
-  5 seeds x 4 constraint variants) for deployment inside a stabilised FEM solver.
+  Trained inference models for the learned stabilisation parameter tau of a
+  SUPG/PSPG/LSIC stabilised finite-element incompressible Navier-Stokes solver.
+  Two complementary multipliers: the isotropic, SH-supervised PC-AiStab network
+  (ONNX; SH-target and residual-recovery campaigns, 5 seeds x 4 constraint
+  variants) and the anisotropic, discrete-adjoint-supervised ADJSTAB model
+  (portable JSON; 17 features, 17-32-32-1 MLP).
 authors:
   - family-names: Akrami
     given-names: Ehsan
     email: ehsanakrami1@gmail.com
-    orcid: ""
+    orcid: "https://orcid.org/0000-0002-9819-7192"
+  - family-names: Delauré
+    given-names: Yan
+    orcid: "https://orcid.org/0000-0002-7151-9278"
 repository-code: "https://github.com/ehsanakrami/pc-aistab-models"
 url: "https://github.com/ehsanakrami/pc-aistab-models"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21237054"
+    description: "Archival reproducibility capsule on Zenodo (reserved; released on acceptance)."
 license: MIT
-version: "1.0.0"
-date-released: "2026-05-18"
+version: "2.0.0"
+date-released: "2026-07-07"
 keywords:
   - stabilised finite elements
   - SUPG
   - PSPG
   - stabilisation parameter
+  - discrete adjoint
   - neural network
   - incompressible Navier-Stokes
   - ONNX
@@ -31,7 +42,11 @@ preferred-citation:
   authors:
     - family-names: Akrami
       given-names: Ehsan
-  title: "PC-AiStab: a physics-constrained neural-network stabilisation parameter for incompressible Navier-Stokes"
+      orcid: "https://orcid.org/0000-0002-9819-7192"
+    - family-names: Delauré
+      given-names: Yan
+      orcid: "https://orcid.org/0000-0002-7151-9278"
+  title: "A Verified Discrete-Adjoint Framework for Stabilization-Parameter Accuracy in Laminar Incompressible Flow: The Headroom Principle, Parameter-Free Closed Forms, and Certified Deployment"
   journal: "Computer Methods in Applied Mechanics and Engineering"
   year: 2026
   notes: "Submitted"
