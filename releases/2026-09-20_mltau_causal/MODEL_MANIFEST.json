@@ -1,0 +1,142 @@
+{
+  "release": "2026-09-20_mltau_causal",
+  "models": [
+    {
+      "id": "rdeploy_0",
+      "json": "weights/rdeploy_0.json",
+      "json_sha256": "4a98d1a50347b67a6bc076af039d24e76ae4409f31f6d701a3426df29e06c351",
+      "native": "weights/rdeploy_0.txt",
+      "native_sha256": "e2772143de30dee84560974af357e2b55687751a6528bc9113a8a03b10073eb4",
+      "original_private_json_sha256": "4c69143b28a15499e3aed457c0b1079131ade0078d32593037528f025a98ccd6",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "rdeploy_1",
+      "json": "weights/rdeploy_1.json",
+      "json_sha256": "6163042edcc802945be815097c55447cd15999e5e3a3ea122ecf53cd3ccdc03e",
+      "native": "weights/rdeploy_1.txt",
+      "native_sha256": "0794b029a88d72e6bf7bab8e09f3251111b93e2285fd5cb05af8f6734cefa4f3",
+      "original_private_json_sha256": "c6bbe4af6bbb7c3003cdb27ffde6bf21b5756313fb55ed06fb912572c6ffd5cb",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "rdeploy_2",
+      "json": "weights/rdeploy_2.json",
+      "json_sha256": "29a280dabf7fba22aeef0a13677f0771d325de608dcc51bef31badc78d5fd253",
+      "native": "weights/rdeploy_2.txt",
+      "native_sha256": "7c45a23e34cb36e9bab183c650097065805de2e6f88d4d0446678eadd7627263",
+      "original_private_json_sha256": "1894e4827a8874fc347e28547f79eef5a904315b7349fd90ab2951a5105617f1",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "rsecant_0",
+      "json": "weights/rsecant_0.json",
+      "json_sha256": "bbe960d3a89bde33fddae6c81e66d9b5eda52e7a88356c118f151c4770b57488",
+      "native": "weights/rsecant_0.txt",
+      "native_sha256": "3fd35c58b6e0af64983a5c5c43abd33041844906002f63de5ee420513cdaecf9",
+      "original_private_json_sha256": "8df77ee02df28da1155191f145c07b075848b690c98622cff6a9919750b69f45",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "rsecant_1",
+      "json": "weights/rsecant_1.json",
+      "json_sha256": "5d5f38771e1a5e74f521a56d3129195c6bbf2118cdde5227263a805796879ef2",
+      "native": "weights/rsecant_1.txt",
+      "native_sha256": "3dcc57fed130c8c605020bcf53ea0f965ec057321a24481eea7f64d100165506",
+      "original_private_json_sha256": "f312ccefc828545a431c29a758d978a1385a316ca5a8cc673bcade2d3153906d",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "rsecant_2",
+      "json": "weights/rsecant_2.json",
+      "json_sha256": "6597a88d223a2aa14ae3169d06fcd9e9c91bdb55e7ddcf89732b1ed08f30486f",
+      "native": "weights/rsecant_2.txt",
+      "native_sha256": "1a026028595a82763d257533dcb0893ac9b8a50d2cb9ceab17c8a1d69d59a351",
+      "original_private_json_sha256": "57a2d6df5ae459946080385a949f636d0abd04baf800a54ee2a5f3e09c984a9f",
+      "seed": 15201,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "pressure_state_16001",
+      "json": "weights/pressure_state_16001.json",
+      "json_sha256": "d26bb431db2f3eac2d64c25d58e9adab230f99c7df033a700c720a5f7d93db2b",
+      "native": "weights/pressure_state_16001.txt",
+      "native_sha256": "6da8afc8531dabf45e4b3dc359e5f134c9fd2880125c63b7aa3f9033163fe144",
+      "original_private_json_sha256": "a7e754c160c56fa89eb52d03d79c198102df0bcd6b4d59cf120709e78f933c85",
+      "seed": 16001,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "pressure_state_16002",
+      "json": "weights/pressure_state_16002.json",
+      "json_sha256": "fa91c93059baf3db64c73645b4884d84af77cdb3b2d1cfd025f654b3df855922",
+      "native": "weights/pressure_state_16002.txt",
+      "native_sha256": "0762711f2e29a327c7907c7e26b63a71ea2e448a214e3ee7c74d2e5cc1ac3fc1",
+      "original_private_json_sha256": "d3746ebd7253cafa1487b88351905f9a181bd44c6fdca88eed741c7e8c90dbb9",
+      "seed": 16002,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "pressure_state_16003",
+      "json": "weights/pressure_state_16003.json",
+      "json_sha256": "4593541dc8d362befc2449e60eb9a736601d1cd869aaac218fe4b3e549e7b69a",
+      "native": "weights/pressure_state_16003.txt",
+      "native_sha256": "38c1fc1e8cd4554cd6a9ee502e4749bc46906f6d49782b5a400dd36145505a61",
+      "original_private_json_sha256": "d8cfab7a264550e0cf0284474ea19acdd87ba81d39e4f1554b478476f96e4a24",
+      "seed": 16003,
+      "input_kind": "state",
+      "width": 16
+    },
+    {
+      "id": "pressure_blind_16001",
+      "json": "weights/pressure_blind_16001.json",
+      "json_sha256": "c1729c7c46beab87b575011d7a9640ccba8aaf865f60ed3eb3cb3ee5cd99e944",
+      "native": "weights/pressure_blind_16001.txt",
+      "native_sha256": "7c31fafc096314e6caede37be111718b0ef2f24d63121d875eb5a3edbabacab7",
+      "original_private_json_sha256": "47ecdb253d861a861034341fd3675dd269dd46f2d10af26d2b1969923501da6d",
+      "seed": 16001,
+      "input_kind": "blind",
+      "width": 16
+    },
+    {
+      "id": "pressure_blind_16002",
+      "json": "weights/pressure_blind_16002.json",
+      "json_sha256": "df5a03a77cf944af8c00d7a2da3626cb6d57a5549faabb2c810b5593376c4c7c",
+      "native": "weights/pressure_blind_16002.txt",
+      "native_sha256": "20a7ab8df222a2d27baf3213b8bb9ae50ad9f7eae1e584a016b4648f58eb177a",
+      "original_private_json_sha256": "ef22488261093b5f8348ee55a9924fddb7a0440f00b86dd3637778ca975a99ac",
+      "seed": 16002,
+      "input_kind": "blind",
+      "width": 16
+    },
+    {
+      "id": "pressure_blind_16003",
+      "json": "weights/pressure_blind_16003.json",
+      "json_sha256": "63150030a25a676c91d838cfbd63d63e751bcd2be8697d671a54f3d23c1541ee",
+      "native": "weights/pressure_blind_16003.txt",
+      "native_sha256": "bc8e7b44b1647cab53139446e817528894c71f69a5e4f809e53fcf5ce9b275cf",
+      "original_private_json_sha256": "1eb703f1c32b5ecc2f93e0217ad19207469302fed65c5a595ff7cace5cc01175",
+      "seed": 16003,
+      "input_kind": "blind",
+      "width": 16
+    }
+  ],
+  "solver_source_included": false,
+  "training_code_included": false,
+  "corpus_included": false,
+  "independent_scalar_vs_vector_max_absolute_error": 3.552713678800501e-15,
+  "scientific_submission_ready": false
+}

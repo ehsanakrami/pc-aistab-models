@@ -1,12 +1,31 @@
 # Learned Stabilisation-Parameter Models for Incompressible Navier–Stokes
 
+## Current model-only release — 20 September 2026
+
+The current 14-feature causal models are in
+[`releases/2026-09-20_mltau_causal`](releases/2026-09-20_mltau_causal).
+This version contains twelve frozen models, normalization statistics,
+synthetic inference fixtures and explicit validation limitations. It contains
+no solver source, training code or training corpus. The new models are
+experimental: fine-grid pressure and periodic qualification remain unresolved,
+and a general learned wall-clock speedup is not established. Read the model
+card before use. The existing MIT licence applies to this model release.
+
+The sections below describe older 48- and 17-feature models and historical
+manuscript claims; they are not the specification or validation record of the
+new 14-feature release. Historical submission statements and the reserved
+Zenodo identifier below do not certify the status or availability of the
+current manuscript. Cite the new release by its version and commit permalink.
+
+## Legacy model documentation
+
 **PC-AiStab (isotropic, do-no-harm) and ADJSTAB (anisotropic, adjoint-supervised) neural stabilisation-parameter models**
 
 This repository releases the trained inference models from the paper:
 
 > E. Akrami and Y. Delauré, *A Verified Discrete-Adjoint Framework for Stabilization-Parameter Accuracy in Laminar Incompressible Flow: The Headroom Principle, Parameter-Free Closed Forms, and Certified Deployment*, submitted to *Computer Methods in Applied Mechanics and Engineering*, 2026.
 
-The full archival reproducibility capsule for the paper (solver, discrete-adjoint implementation, closed forms, training corpora, and figure/table scripts) is deposited on Zenodo under the reserved DOI [`10.5281/zenodo.21237054`](https://doi.org/10.5281/zenodo.21237054) — the record is private at submission and is released publicly, activating the DOI, on acceptance.
+Earlier documentation reserved Zenodo identifier `10.5281/zenodo.21237054` for a broader capsule. It is not the access location for the current release, and its public availability is not asserted here. The current distribution decision is model-only: solver and training source remain private, with no promise of public source release on acceptance.
 
 The models correct the Shakib–Hughes–Codina (SH) stabilisation parameter `τ` inside a classical SUPG/PSPG/LSIC stabilised finite-element solver. The repository contains **two complementary learned multipliers**:
 
